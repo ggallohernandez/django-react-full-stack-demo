@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: .docker/api/Dockerfile
+    image: django-full-stack-demo/api
+    container_name: api
+    command: ["./manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - './:/app:delegated'
+    ports:
+      - 8000:8000
+    networks:
+      - demo_net
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - './:/app:ro'
+      - './.docker/nginx.dev/:/etc/nginx/conf.d:ro'
+      - './node_modules:/app/node_modules:ro'
+    networks:
+      - demo_net
+
+  frontend:
+    image: node:latest
+    container_name: frontend
+    user: node
+    working_dir: /app
+    volumes:
+      - './:/app:delegated'
+    environment:
+      HTTPS: 1
+      SSL_CRT_FILE: .cert/server.crt
+      SSL_KEY_FILE: .cert/server.key
+    networks:
+      - demo_net
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: unless-stopped
+    user: root
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MH_UI_WEB_PATH: mailhog
+    networks:
+      - demo_net
+
+networks:
+  demo_net:
+    driver: bridge
