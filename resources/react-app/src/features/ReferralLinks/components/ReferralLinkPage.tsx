@@ -1,7 +1,11 @@
 import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button, Form, Row} from "react-bootstrap";
-import {addReferralLinkAction, getReferralLinkListAction} from "../actions/referralLinkAction";
+import {
+    addReferralLinkAction,
+    getReferralLinkListAction,
+    incrementReferralLinkClicksAction
+} from "../actions/referralLinkAction";
 import AddReferralLinkForm from "./AddReferralLinkForm";
 import ReferralLinkList from "./ReferralLinkList";
 

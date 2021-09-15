@@ -10,6 +10,7 @@ import {
     deleteReferralLinkAction,
     getReferralLinkListAction
 } from "../../../features/ReferralLinks/actions/referralLinkAction";
+import {Button} from "react-bootstrap";
 
 export default () => {
     const dispatch = useDispatch();
@@ -70,21 +71,24 @@ export default () => {
                                 </td>
                                 <td className="px-2 py-2">{referralLink.clicks}</td>
                                 <td className="px-2 py-2">
-                                    <a
+                                    <Button
                                         href={`/referral-link/${referralLink.id}/edit`}
                                         target="_blank"
+                                        variant="secondary"
                                         rel="noopener noreferrer"
                                         onClick={stopPropagation}
                                     >
                                         Edit
-                                    </a>
+                                    </Button>
                                 </td>
                                 <td className="px-2 py-2">
-                                    <a
+                                    <Button
+                                        rel="noopener noreferrer"
+                                        variant="danger"
                                         onClick={(e) => handleDelete(e, referralLink.id)}
                                     >
                                         Delete
-                                    </a>
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

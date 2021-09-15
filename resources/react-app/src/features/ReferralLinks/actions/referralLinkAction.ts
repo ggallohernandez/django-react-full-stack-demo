@@ -2,11 +2,10 @@ import {ActionType, createAsyncAction} from "typesafe-actions";
 import {
   AddReferralLinkParams,
   DeleteReferralLinkParams,
-  EditReferralLinkParams,
+  EditReferralLinkParams, GetReferralLinkByTitleParams, GetReferralLinkParams, IncrementReferralLinkClicksParams,
   ReferralLink,
   ReferralLinkList
 } from "../types/ReferralLink";
-import {loginUserAction, logoutUserAction} from "@/src/features/Users/actions/loginUserAction";
 
 export const addReferralLinkAction = createAsyncAction(
     "ADD_REFERRAL_LINK_REQUEST",
@@ -32,9 +31,30 @@ export const getReferralLinkListAction = createAsyncAction(
     "GET_REFERRAL_LINKS_ERROR",
 )<undefined, ReferralLinkList, undefined>();
 
+export const getReferralLinkAction = createAsyncAction(
+    "GET_REFERRAL_LINK_REQUEST",
+    "GET_REFERRAL_LINK_SUCCESS",
+    "GET_REFERRAL_LINK_ERROR",
+)<GetReferralLinkParams, ReferralLink, undefined>();
+
+export const getReferralLinkByTitleAction = createAsyncAction(
+    "GET_REFERRAL_LINK_BY_TITLE_REQUEST",
+    "GET_REFERRAL_LINK_BY_TITLE_SUCCESS",
+    "GET_REFERRAL_LINK_BY_TITLE_ERROR",
+)<GetReferralLinkByTitleParams, ReferralLink, undefined>();
+
+export const incrementReferralLinkClicksAction = createAsyncAction(
+    "INCREMENT_REFERRAL_LINK_CLICKS_REQUEST",
+    "INCREMENT_REFERRAL_LINK_CLICKS_SUCCESS",
+    "INCREMENT_REFERRAL_LINK_CLICKS_ERROR",
+)<IncrementReferralLinkClicksParams, ReferralLink, undefined>();
+
 type actions =
     | ActionType<typeof addReferralLinkAction>
     | ActionType<typeof getReferralLinkListAction>
+    | ActionType<typeof getReferralLinkAction>
+    | ActionType<typeof getReferralLinkByTitleAction>
+    | ActionType<typeof incrementReferralLinkClicksAction>
     | ActionType<typeof addReferralLinkAction>
     | ActionType<typeof deleteReferralLinkAction>;
 

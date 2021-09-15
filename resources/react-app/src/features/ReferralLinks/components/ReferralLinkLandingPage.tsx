@@ -1,37 +1,59 @@
-import React, {ChangeEvent, useCallback, useState} from "react";
-import {Button, Form, Row} from "react-bootstrap";
+import React, {ChangeEvent, useCallback, useEffect, useState} from "react";
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {
+    getReferralLinkAction, incrementReferralLinkClicksAction,
+} from "../../../features/ReferralLinks/actions/referralLinkAction";
+import {useDispatch, useSelector} from "react-redux";
+import {selectReferralLink} from "../../../shared/selectors/referralLinksSelector";
+import {State} from "../../../shared/types/State";
+import {selectRequestsLoadingStatus} from "../../../shared/selectors/requestsSelector";
+import {GET_REFERRAL_LINK_REQUEST, GET_REFERRAL_LINKS_REQUEST, LoadingStatusEnum} from "../../../shared/constants";
+import {Skeletons} from "../../../shared/components/Skeletons/Skeletons";
+import {useParams} from "react-router";
 
-export type AddReferralLinkProps = {
-    onSubmit: (link: string) => void;
-};
+export default () => {
+    const dispatch = useDispatch();
 
-export default ({ onSubmit }: AddReferralLinkProps) => {
+    const { linkId } = useParams<{ linkId: string }>();
 
-    const title = useState("");
+    dispatch(incrementReferralLinkClicksAction.request({ id: parseInt(linkId) }))
 
-    const handleLinkChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.target.value);
-    }, []);
+    const referralLink = useSelector(selectReferralLink);
 
-    const handleAddLink = useCallback(() => {
-        onSubmit(title);
-    }, [
-        title,
-    ]);
+    const getReferralLinkStatus = useSelector((state: State) =>
+        selectRequestsLoadingStatus(state, GET_REFERRAL_LINK_REQUEST),
+    );
+
+    useEffect(() => {
+        dispatch(getReferralLinkAction.request({ id: parseInt(linkId) }));
+    }, [dispatch, linkId]);
 
     return (
-        <div className="d-flex align-items-stretch">
-            <div className="flex-grow-1 d-flex flex-column min-vh-100">
-                <div className="d-flex pl-3 pr-3 justify-content-center">
-                    <div className="bg-gray-200 flex-grow-1">
-                        <div className="d-flex pl-3 pr-3 justify-content-center">
-                            <Row>
-                                <h3></h3>
-                            </Row>
-                        </div>
-                    </div>
+        <>
+            {getReferralLinkStatus === LoadingStatusEnum.LOADING && (
+                <div className="pt-6 pl-4 pr-4">
+                    <Skeletons rows={6} mb={6} />
                 </div>
-            </div>
-        </div>
+            )}
+            {getReferralLinkStatus === LoadingStatusEnum.LOADED && (
+                <Container className={"text-center pt-3"}>
+                    <Row>
+                        <Col sm={12}>
+                            <h1>{referralLink.title} are awsome!</h1>
+                        </Col>
+                    </Row>
+                    <Row className={"pt-3"}>
+                        <Col sm={12}>
+                            <h3>Come join Tim's World Wide Web!</h3>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm={12}>
+                            <img src={'/assets/img/getambassador_logo.jpg'} className={"img-fluid w-25"} />
+                        </Col>
+                    </Row>
+                </Container>
+            )}
+        </>
     );
 }

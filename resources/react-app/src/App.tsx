@@ -11,6 +11,9 @@ import LoginUserPage from "./features/Users/components/LoginUserPage";
 import HomePage from "./features/Home/components/HomePage";
 import store, {persistor} from "./shared/store";
 import ReferralLinkPage from "./features/ReferralLinks/components/ReferralLinkPage";
+import ReferralLinkLandingPage from "./features/ReferralLinks/components/ReferralLinkLandingPage";
+import ReferralLinkSimpleLandingPage from "./features/ReferralLinks/components/ReferralLinkSimpleLandingPage";
+import EditReferralLinkForm from "./features/ReferralLinks/components/EditReferralLinkForm";
 
 const Root = () => (
     <Provider store={store}>
@@ -18,7 +21,10 @@ const Root = () => (
             <BrowserRouter>
                 <Switch>
                     <Route exact={true} path="/landing">
-                        <HomePage />
+                        <ReferralLinkSimpleLandingPage />
+                    </Route>
+                    <Route exact={true} path="/landing/:linkId">
+                        <ReferralLinkLandingPage />
                     </Route>
                     <Layout>
                         <Route exact={true} path="/">
@@ -26,6 +32,9 @@ const Root = () => (
                         </Route>
                         <Route exact={true} path="/referral-links">
                             <ReferralLinkPage />
+                        </Route>
+                        <Route exact={true} path="/referral-link/:linkId/edit">
+                            <EditReferralLinkForm />
                         </Route>
                     </Layout>
                 </Switch>
